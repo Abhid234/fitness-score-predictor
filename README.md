@@ -100,11 +100,14 @@ streamlit run app.py
 ```
 
 ## Files
--app.py Streamlit app
--Model_Training.ipynb Data pipeline, model training, tuning, SHAP analysis
--fitness_scored.csv Cleaned and labeled dataset
--fitness_model_final.pkl Trained XGBoost model
--requirements.txt
+
+| File | Purpose |
+|---|---|
+| `app.py` | Streamlit app |
+| `Model_Training.ipynb` | Data pipeline, model training, tuning, SHAP analysis |
+| `fitness_scored.csv` | Cleaned and labeled dataset |
+| `fitness_model_final.pkl` | Trained XGBoost model |
+| `requirements.txt` | Dependencies |
 
 ## Limitations
 
