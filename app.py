@@ -20,6 +20,21 @@ if "info" not in st.session_state:
 def go_to_step1():
     st.session_state.step = 1
 
+PRETTY = {
+    "age": "Age",
+    "gender": "Gender",
+    "weight_kg": "Weight",
+    "height_cm": "Height",
+    "resting_heart_rate": "Resting Heart Rate",
+    "calorie_intake": "Calorie Intake",
+    "body_fat_pct": "Body Fat %",
+    "lean_mass_pct": "Lean Mass %",
+    "sleep_hours": "Sleep",
+    "workout_minutes": "Workout Minutes",
+    "daily_activity_minutes": "Daily Activity",
+}
+
+
 
 if st.session_state.step == 1:
     st.title("Fitness Score Predictor")
@@ -92,19 +107,33 @@ elif st.session_state.step == 2:
         st.balloons()
         st.success(f"Excellent score!")
     elif score >= 60:
-        st.info(f"Good score!")
+        st.success(f"Good score!")
     elif score >= 50:
-        st.info(f"Average score")    
+        st.info("Average score")    
     else:
-        st.warning(f"Must improve")
+        st.warning(f"Room to improve")
 
     st.metric("Predicted Fitness Score", f"{score:.1f} / 100")
 
     st.subheader("What's driving your score")
+
     shap_values = explainer(input_df)
 
-    fig = plt.figure()
-    shap.plots.waterfall(shap_values[0], show=False)
-    st.pyplot(fig)
+    contrib = pd.DataFrame({
+        "feature": [PRETTY[c] for c in input_df.columns],
+        "impact": shap_values[0].values,
+    })
+    helping = contrib[contrib.impact > 0].sort_values("impact", ascending=False).head(3)
+    hurting = contrib[contrib.impact < 0].sort_values("impact").head(3)
+
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("**Helping your score**")
+        for _, r in helping.iterrows():
+            st.markdown(f"- {r.feature} (+{r.impact:.1f})")
+    with c2:
+        st.markdown("**Holding you back**")
+        for _, r in hurting.iterrows():
+            st.markdown(f"- {r.feature} ({r.impact:.1f})")
 
     st.button("Back", on_click=go_to_step1)
