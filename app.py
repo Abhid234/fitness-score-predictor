@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import joblib
 import shap
-import matplotlib.pyplot as plt
 
 model = joblib.load("fitness_model_final.pkl")
 explainer = shap.TreeExplainer(model)
@@ -20,9 +19,9 @@ if "info" not in st.session_state:
 def go_to_step1():
     st.session_state.step = 1
 
+# Only these show up in the score breakdown — age and gender are used by the
+# model but left out here since a user can't act on them.
 PRETTY = {
-    "age": "Age",
-    "gender": "Gender",
     "weight_kg": "Weight",
     "height_cm": "Height",
     "resting_heart_rate": "Resting Heart Rate",
@@ -120,20 +119,29 @@ elif st.session_state.step == 2:
     shap_values = explainer(input_df)
 
     contrib = pd.DataFrame({
-        "feature": [PRETTY[c] for c in input_df.columns],
+        "col": input_df.columns,
         "impact": shap_values[0].values,
     })
+    contrib = contrib[contrib["col"].isin(PRETTY)]
+    contrib["feature"] = contrib["col"].map(PRETTY)
+
     helping = contrib[contrib.impact > 0].sort_values("impact", ascending=False).head(3)
     hurting = contrib[contrib.impact < 0].sort_values("impact").head(3)
 
     c1, c2 = st.columns(2)
     with c1:
         st.markdown("**Helping your score**")
-        for _, r in helping.iterrows():
-            st.markdown(f"- {r.feature} (+{r.impact:.1f})")
+        if helping.empty:
+            st.markdown("- Nothing standing out")
+        else:
+            for _, r in helping.iterrows():
+                st.markdown(f"- {r.feature} (+{r.impact:.1f})")
     with c2:
         st.markdown("**Holding you back**")
-        for _, r in hurting.iterrows():
-            st.markdown(f"- {r.feature} ({r.impact:.1f})")
+        if hurting.empty:
+            st.markdown("- Nothing standing out")
+        else:
+            for _, r in hurting.iterrows():
+                st.markdown(f"- {r.feature} ({r.impact:.1f})")
 
     st.button("Back", on_click=go_to_step1)
