@@ -74,7 +74,7 @@ Resulting distribution across the dataset: mean ≈ 59, range 19–95.
 
 An **XGBoost regressor** trained to predict the score from the raw inputs — it
 never sees the scoring formula, only examples. Hyperparameters tuned with
-`RandomizedSearchCV` (50 iterations, 5-fold CV).
+`RandomizedSearchCV` (75 iterations, 5-fold CV).
 
 | Metric | Held-out test set |
 |---|---|
