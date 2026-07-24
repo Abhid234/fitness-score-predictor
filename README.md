@@ -3,7 +3,7 @@
 An end-to-end ML project that predicts a 0–100 fitness score from a person's
 health metrics, and explains which of their habits drove that score.
 
-**[Live demo](https://your-app.streamlit.app)** · [Model training notebook](Model_Training.ipynb)
+**[Live demo]([https://fitness-score-predictor.streamlit.app/])** · [Model training notebook](Model_Training.ipynb)
 
 ---
 
