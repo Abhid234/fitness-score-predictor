@@ -32,6 +32,20 @@ respondent ID:
 
 After merging, cleaning, and dropping incomplete records: **2,216 usable rows.**
 
+## Tech stack
+
+| Layer | Tools |
+|---|---|
+| Language | Python 3.13 |
+| Data wrangling | pandas, NumPy |
+| Data source | NHANES `.xpt` files, read via `pandas.read_sas` |
+| Modeling | XGBoost, scikit-learn (`train_test_split`, `RandomizedSearchCV`, metrics) |
+| Explainability | SHAP (`TreeExplainer`) |
+| App | Streamlit |
+| Model persistence | joblib |
+| Development | Jupyter Notebook |
+| Deployment | Streamlit Community Cloud, GitHub |
+
 ### Feature engineering
 
 - **Lean mass %** — DXA reports lean mass in grams; converted to a percentage of
