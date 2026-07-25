@@ -19,8 +19,6 @@ if "info" not in st.session_state:
 def go_to_step1():
     st.session_state.step = 1
 
-# Only these show up in the score breakdown — age and gender are used by the
-# model but left out here since a user can't act on them.
 PRETTY = {
     "weight_kg": "Weight",
     "height_cm": "Height",
@@ -53,7 +51,7 @@ if st.session_state.step == 1:
         "daily_activity_minutes": None,
     }
 
-    with st.form(key="input"):
+    with st.form(key="input", enter_to_submit=False):
         col1, col2 = st.columns(2)
 
         with col1:
